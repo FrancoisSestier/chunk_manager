@@ -14,7 +14,7 @@ namespace ckm {
             return std::format("x : {},  y : {}", x, y);
         }
 
-        auto to_string(const int2& val) { to_string(val.x, val.y); }
+        auto to_string(const int2& val) { return to_string(val.x, val.y); }
 
     }  // namespace details
 
