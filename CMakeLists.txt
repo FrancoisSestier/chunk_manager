@@ -16,13 +16,16 @@ endif()
 include(cmake/tools.cmake)
 include(cmake/CPM.cmake)
 CPMAddPackage("gh:TheLartians/PackageProject.cmake@1.6.0")
-CPMAddPackage("gh:FrancoisSestier/matrix_layer_stack@1.0")
+CPMAddPackage("gh:FrancoisSestier/matrix_layer_stack#dcbd4852ddf296ce22b568131867ea8508999600")
+#CPMAddPackage("gh:FrancoisSestier/glm#941395c1187409de06386852376180b42ddc7ca2") 
 file(GLOB_RECURSE headers CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
 
 add_library(chunk_manager_headers EXCLUDE_FROM_ALL ${headers})
 set_target_properties(chunk_manager_headers PROPERTIES LINKER_LANGUAGE CXX)
 
 add_library(chunk_manager INTERFACE)
+target_link_libraries(chunk_manager INTERFACE mls)
+#target_link_libraries(chunk_manager INTERFACE glm)
 
 set_target_properties(chunk_manager PROPERTIES INTERFACE_COMPILE_FEATURES cxx_std_20)
 target_compile_options(chunk_manager INTERFACE "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->")
