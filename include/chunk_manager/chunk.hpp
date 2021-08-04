@@ -35,7 +35,7 @@ namespace ckm {
     template <size_t chunk_width, size_t chunk_height, typename... data_types> requires (details::are_distinct_v<data_types...>)
     class chunk {
        public:
-        using storage_t = typename mls::matrix_tuple<chunk_width, chunk_height,
+        using storage_t = mls::matrix_tuple<chunk_width, chunk_height,
                                                      data_types...>;
 
         inline static constexpr size_t width = storage_t::width;
