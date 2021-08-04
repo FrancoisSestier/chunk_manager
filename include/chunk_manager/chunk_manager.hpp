@@ -12,7 +12,7 @@ namespace ckm {
     class chunk_mananger {
        public:
         using chunk_matrix_t = chunk_matrix<width, height, chunk_type>;
-        using chunk_t = typename chunk_type;
+        using chunk_t = chunk_type;
         using storage_type = std::array<chunk_t, chunk_t::size>;
         using map = map_t<chunk_matrix_t>;
         using map_utils = map_utils_t<map>;

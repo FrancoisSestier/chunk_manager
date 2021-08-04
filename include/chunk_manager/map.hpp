@@ -9,7 +9,7 @@ namespace ckm {
     template <typename chunk_matrix>
     struct map_t {
         using chunk_t = typename chunk_matrix::chunk_t;
-        using chunk_matrix_t = typename chunk_matrix;
+        using chunk_matrix_t = chunk_matrix;
         inline static constexpr size_t width
             = chunk_matrix_t::width * chunk_t::width;
         inline static constexpr size_t height

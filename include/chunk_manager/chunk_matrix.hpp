@@ -15,11 +15,11 @@ namespace ckm {
         inline static constexpr size_t height = ckm_width;
         inline static constexpr size_t width = ckm_height;
         inline static constexpr size_t size = width * height;
-        using chunk_t = typename chunk_type;
+        using chunk_t = chunk_type;
         using mutexed_chunk_t = mutexed_chunk<chunk_t>;
         using storage_type = std::array<mutexed_chunk_t, size>;
-        using map = typename map_t<chunk_matrix>;
-        using map_utils = typename map_utils_t<map>;
+        using map = map_t<chunk_matrix>;
+        using map_utils = map_utils_t<map>;
 
         void init() {
             for (chunk_id_t i = 0; i < chunk_storage_.size(); i++) {

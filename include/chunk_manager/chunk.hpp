@@ -11,10 +11,10 @@ namespace ckm {
     using chunk_id_t = uint32_t;
     inline static constexpr chunk_id_t _invalid_chunk = UINT32_MAX;
 
-    template <size_t width, size_t height, typename... Ts>
+    template <size_t chunk_width, size_t chunk_height, typename... data_types>
     class chunk {
        public:
-        using storage_t = typename mls::matrix_tuple<width, height, Ts...>;
+        using storage_t = typename mls::matrix_tuple<chunk_width, chunk_height, data_types...>;
 
         inline static constexpr size_t width = storage_t::width;
         inline static constexpr size_t height = storage_t::height;
