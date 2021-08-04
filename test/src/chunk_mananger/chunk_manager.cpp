@@ -1,4 +1,3 @@
-#pragma once
 #include <gtest/gtest.h>
 
 #include <chunk_manager/chunk_manager.hpp>

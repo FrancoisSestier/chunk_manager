@@ -6,6 +6,7 @@ project(chunk_manager_test
 
 option(ENABLE_TEST_COVERAGE "Enable test coverage" ON)
 
+include(../cmake/tools.cmake)
 include(../cmake/CPM.cmake)
 find_package(Threads REQUIRED)
 

@@ -1,6 +1,6 @@
 #pragma once
 #include <chunk_manager/int2.hpp>
-#include <format>
+#include <fmt/format.h>
 #include <mls/matrix_tuple.hpp>
 #include <mutex>
 #include <optional>
@@ -40,7 +40,7 @@ namespace ckm {
         chunk_id_t id() { return chunk_id_; }
 
         auto to_string() {
-            return std::format("\n\tchunk_id : {} \n\t pos : {}", chunk_id_,
+            return fmt::format("\n\tchunk_id : {} \n\t pos : {}", chunk_id_,
                                details::to_string(pos_));
         }
 
@@ -53,7 +53,7 @@ namespace ckm {
             if (x < pos_.x || x >= pos_.x + width || y < pos_.y
                 || y >= pos_.y + height) {
                 throw std::runtime_error(
-                    std::format("pos out of chunk bounds : {} \n {}",
+                    fmt::format("pos out of chunk bounds : {} \n {}",
                                 this->to_string(), details::to_string(x, y)));
             }
         }

@@ -48,7 +48,7 @@ namespace ckm {
        private:
         static void bound_check(int x, int y) {
             if (!in_bounds(x, y)) {
-                throw(std::runtime_error(std::format(
+                throw(std::runtime_error(fmt::format(
                     "pos out of map bounds : {} ", details::to_string(x, y))));
             }
         }
@@ -56,7 +56,7 @@ namespace ckm {
         static void id_check(chunk_id_t chunk_id) {
             if (!valid_chunk_id(chunk_id)) {
                 throw(std::runtime_error(
-                    std::format("invalid chunk id : {} ", chunk_id)));
+                    fmt::format("invalid chunk id : {} ", chunk_id)));
             }
         }
     };
