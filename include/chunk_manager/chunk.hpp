@@ -1,6 +1,7 @@
 #pragma once
-#include <chunk_manager/int2.hpp>
 #include <fmt/format.h>
+
+#include <chunk_manager/int2.hpp>
 #include <mls/matrix_tuple.hpp>
 #include <mutex>
 #include <optional>
@@ -11,10 +12,31 @@ namespace ckm {
     using chunk_id_t = uint32_t;
     inline static constexpr chunk_id_t _invalid_chunk = UINT32_MAX;
 
-    template <size_t chunk_width, size_t chunk_height, typename... data_types>
+    namespace details {
+
+        template <typename T, typename... Ts>
+        struct are_distinct
+            : std::conjunction<std::negation<std::is_same<T, Ts>>...,
+                               are_distinct<Ts...>> {};
+
+        template <typename T>
+        struct are_distinct<T> : std::true_type {};
+
+        template <typename... Ts>
+        inline static constexpr bool are_distinct_v = are_distinct<Ts...>::value;
+
+        template <typename T, typename... Ts>
+        struct contains : std::disjunction<std::is_same<T, Ts>...> {};
+
+        template <typename T, typename... Ts>
+        inline static constexpr bool contains_v = contains<T, Ts...>::value;
+    }  // namespace details
+
+    template <size_t chunk_width, size_t chunk_height, typename... data_types> requires (details::are_distinct_v<data_types...>)
     class chunk {
        public:
-        using storage_t = typename mls::matrix_tuple<chunk_width, chunk_height, data_types...>;
+        using storage_t = typename mls::matrix_tuple<chunk_width, chunk_height,
+                                                     data_types...>;
 
         inline static constexpr size_t width = storage_t::width;
         inline static constexpr size_t height = storage_t::height;
@@ -26,7 +48,8 @@ namespace ckm {
         }
 
         template <typename... Ts>
-        auto get(int x, int y) {
+        requires(std::conjunction_v<details::contains<Ts, data_types...>...>)
+            [[nodiscard]] auto get(int x, int y) {
             try {
                 in_bounds(x, y);
                 return storage_.get<Ts...>(static_cast<size_t>(x) % width,
