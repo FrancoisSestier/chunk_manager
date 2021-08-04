@@ -30,9 +30,9 @@ else()
   CPMAddPackage("gh:FrancoisSestier/matrix_layer_stack#fa02865b9c614f728a1c6bc7881ca8a046432975")
   CPMAddPackage(
   NAME fmt
-  GITHUB fmtlib/fmt
-  TAG  8.0.1
-  OPTIONS FMT_HEADER_ONLY FMT_INSTALL
+  GITHUB_REPOSITORY  fmtlib/fmt
+  GIT_TAG 8.0.1
+  OPTIONS "FMT_HEADER_ONLY YES"  "FMT_INSTALL YES"
   )
 
 endif()
