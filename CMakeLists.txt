@@ -6,6 +6,8 @@ project(
   LANGUAGES CXX
 )
 
+
+
 if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
   message(
     FATAL_ERROR
@@ -13,10 +15,28 @@ if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
   )
 endif()
 
+option(CKM_DONT_INSTALL_DEPS "intall external dep mls" OFF)
+
 include(cmake/tools.cmake)
 include(cmake/CPM.cmake)
+
 CPMAddPackage("gh:TheLartians/PackageProject.cmake@1.6.0")
-CPMAddPackage("gh:FrancoisSestier/matrix_layer_stack#dcbd4852ddf296ce22b568131867ea8508999600")
+
+if (CKM_DONT_INSTALL_DEPS)
+  find_package(mls REQUIRED)
+  find_package(mls REQUIRED)
+
+else()
+  CPMAddPackage("gh:FrancoisSestier/matrix_layer_stack#fa02865b9c614f728a1c6bc7881ca8a046432975")
+  CPMAddPackage(
+  NAME fmt
+  GITHUB fmtlib/fmt
+  TAG  8.0.1
+  OPTIONS FMT_HEADER_ONLY FMT_INSTALL
+  )
+
+endif()
+
 #CPMAddPackage("gh:FrancoisSestier/glm#941395c1187409de06386852376180b42ddc7ca2") 
 file(GLOB_RECURSE headers CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
 
@@ -24,8 +44,9 @@ add_library(chunk_manager_headers EXCLUDE_FROM_ALL ${headers})
 set_target_properties(chunk_manager_headers PROPERTIES LINKER_LANGUAGE CXX)
 
 add_library(chunk_manager INTERFACE)
+
 target_link_libraries(chunk_manager INTERFACE mls)
-#target_link_libraries(chunk_manager INTERFACE glm)
+target_link_libraries(chunk_manager INTERFACE fmt)
 
 set_target_properties(chunk_manager PROPERTIES INTERFACE_COMPILE_FEATURES cxx_std_20)
 target_compile_options(chunk_manager INTERFACE "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->")
