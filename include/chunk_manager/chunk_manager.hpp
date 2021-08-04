@@ -18,26 +18,26 @@ namespace ckm {
         using map_utils = map_utils_t<map>;
 
 
-        chunk_mananger() { chunk_matrix.init(); }
+        chunk_mananger() { chunk_matrix_.init(); }
 
         auto aquire(chunk_id_t chunk_id) {
-            return chunk_matrix.aquire(chunk_id);
+            return chunk_matrix_.aquire(chunk_id);
         }
 
         auto try_aquire(chunk_id_t chunk_id) {
-            return chunk_matrix.try_aquire(chunk_id);
+            return chunk_matrix_.try_aquire(chunk_id);
         }
 
         auto aquire(int x, int y) {
-            return chunk_matrix.aquire(x,y);
+            return chunk_matrix_.aquire(x,y);
         }
 
         auto try_aquire(int x, int y) {
-            return chunk_matrix.try_aquire(x,y);
+            return chunk_matrix_.try_aquire(x,y);
         }
 
        private:
-        chunk_matrix_t chunk_matrix;
+        chunk_matrix_t chunk_matrix_;
     };
 
 }  // namespace ckm
