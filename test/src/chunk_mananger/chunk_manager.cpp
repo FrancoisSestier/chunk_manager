@@ -11,6 +11,8 @@ using chunk_t = ckm::chunk<10, 20, elevation, tile_id>;
 using chunk_manager_t = ckm::chunk_mananger<10, 10, chunk_t>;
 using map_utils = chunk_manager_t::map_utils;
 
+using namespace mls;
+
 TEST(map_utils, chunk_id) {
     ckm::int2 pos{59, 125};
     ckm::chunk_id_t chunk_id = map_utils::world_pos_to_chunk_id(pos.x, pos.y);
@@ -28,17 +30,18 @@ TEST(chunk_mananger, ctor) {
 TEST(chunk_mananger, aquire) {
     ckm::int2 pos{24, 182};
 
+    
     chunk_manager_t chunk_manager;
     {
         auto locked_chunk = chunk_manager.aquire(pos.x, pos.y);
 
         ASSERT_EQ(locked_chunk->pos().x, 20);
         ASSERT_EQ(locked_chunk->pos().y, 180);
-        
-            auto [el, tid] = locked_chunk->get<elevation, tile_id>(22, 181);
-            //el = 10;
-           // tid = 22;
-        
+
+        auto [el, tid] = locked_chunk->get<elevation, tile_id>(22, 181);
+        el = 10;
+        tid = 22;
+
         auto locked_chunk2 = chunk_manager.try_aquire(pos.x, pos.y);
         ASSERT_FALSE(locked_chunk2.has_value());
     }
@@ -47,7 +50,12 @@ TEST(chunk_mananger, aquire) {
     auto& locked_chunk = locked_chunk_opt.value();
     ASSERT_EQ(locked_chunk->pos().x, 20);
     ASSERT_EQ(locked_chunk->pos().y, 180);
-    //auto [el, tid] = locked_chunk->get<elevation, tile_id>(22, 181);
-    //ASSERT_EQ(el, 10);
-    //ASSERT_EQ(tid, 22);
+
+    auto [el, tid] = locked_chunk->get<elevation, tile_id>(22, 181);
+
+    elevation e (10);
+    tile_id t (22);
+
+    ASSERT_EQ(el, e);
+    ASSERT_EQ(tid, t);
 }
