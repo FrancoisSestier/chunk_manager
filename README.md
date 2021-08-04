@@ -29,8 +29,8 @@ chunk_manager_t chunk_manager;
     tile_id = 51;
 
 
-    auto locked_chunk2 = chunk_manager.try_aquire(chunk_id_t(5)); // won't work since the chunk is already locked
-    assert(!locked_chunk2.has_value()); 
+    auto locked_chunk2 = chunk_manager.try_aquire(chunk_id_t(5)); // will return empty optional (std::nullopt)
+    assert(!locked_chunk2.has_value()); // won't trigger
 
 }// lock is released when locked_chunk gets out of scope
 ```
