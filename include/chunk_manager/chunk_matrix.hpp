@@ -9,6 +9,11 @@
 
 namespace ckm {
 
+    using acess_permission = uint8_t;
+
+    inline static constexpr acess_permission read = 0;
+    inline static constexpr acess_permission write = 1;
+
     template <size_t ckm_width, size_t ckm_height, typename chunk_type>
     struct chunk_matrix {
        public:
@@ -16,7 +21,7 @@ namespace ckm {
         inline static constexpr size_t width = ckm_height;
         inline static constexpr size_t size = width * height;
         using chunk_t = chunk_type;
-        using mutexed_chunk_t = mutexed_chunk<chunk_t>;
+        using mutexed_chunk_t = protected_chunk<chunk_t>;
         using storage_type = std::array<mutexed_chunk_t, size>;
         using map = map_t<chunk_matrix>;
         using map_utils = map_utils_t<map>;
@@ -26,16 +31,32 @@ namespace ckm {
                 chunk_storage_.at(i).init(i, pos(i));
             }
         }
-
-        auto aquire(int x, int y) { return aquire(index(x, y)); }
-        auto try_aquire(int x, int y) { return try_aquire(index(x, y)); }
-
-        auto aquire(chunk_id_t chunk_id) {
-            return chunk_storage_.at(chunk_id).aquire();
+        template <acess_permission access_level>
+        auto aquire(int x, int y) {
+            return aquire<access_level>(index(x, y));
         }
 
+        template <acess_permission access_level>
+        auto try_aquire(int x, int y) {
+            return try_aquire<access_level>(index(x, y));
+        }
+
+        template <acess_permission access_level>
+        auto aquire(chunk_id_t chunk_id) {
+            if constexpr (access_level == read) {
+                return chunk_storage_.at(chunk_id).acquire_read();
+            } else if constexpr (access_level == write) {
+                return chunk_storage_.at(chunk_id).acquire_write();
+            }
+        }
+
+        template <acess_permission access_level>
         auto try_aquire(chunk_id_t chunk_id) {
-            return chunk_storage_.at(chunk_id).try_aquire();
+            if constexpr (access_level == read) {
+                return chunk_storage_.at(chunk_id).try_acquire_read();
+            } else if constexpr (access_level == write) {
+                return chunk_storage_.at(chunk_id).try_acquire_write();
+            }
         }
 
        private:

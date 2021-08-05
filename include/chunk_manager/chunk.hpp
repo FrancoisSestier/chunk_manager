@@ -60,6 +60,19 @@ namespace ckm {
             }
         }
 
+        template <typename... Ts>
+        requires(std::conjunction_v<details::contains<Ts, data_types...>...>)
+            [[nodiscard]] auto get(int x, int y) const {
+            try {
+                in_bounds(x, y);
+                return storage_.get<std::add_const_t<Ts>...>(static_cast<size_t>(x) % width,
+                                           static_cast<size_t>(y) % height);
+            } catch (const std::exception& e) {
+                std::cout << e.what() << std::endl;
+                return storage_.get<std::add_const_t<Ts>...>(0, 0);
+            }
+        }
+
         chunk_id_t id() { return chunk_id_; }
 
         auto to_string() {

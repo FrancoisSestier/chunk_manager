@@ -17,7 +17,6 @@ namespace ckm {
         using map = map_t<chunk_matrix_t>;
         using map_utils = map_utils_t<map>;
 
-
         chunk_mananger() { chunk_matrix_.init(); }
 
         auto aquire(chunk_id_t chunk_id) {
@@ -28,12 +27,14 @@ namespace ckm {
             return chunk_matrix_.try_aquire(chunk_id);
         }
 
+        template <acess_permission access_level>
         auto aquire(int x, int y) {
-            return chunk_matrix_.aquire(x,y);
+            return chunk_matrix_.aquire<access_level>(x, y);
         }
 
+        template <acess_permission access_level>
         auto try_aquire(int x, int y) {
-            return chunk_matrix_.try_aquire(x,y);
+            return chunk_matrix_.try_aquire<access_level>(x, y);
         }
 
        private:
