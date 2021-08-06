@@ -31,15 +31,15 @@ chunk_manager_t chunk_manager;
 
     auto locked_chunk2 = chunk_manager.try_acquire<ckm::write>(chunk_id_t(5));
     assert(!locked_chunk2.has_value()); // won't trigger 
-}// lock is released when locked_chunk gets out of scope
+}   // lock is released when locked_chunk gets out of scope
 
-    auto locked_chunk = chunk_manager.acquire<ckm::read>(chunk_id_t(5));  // multiple instance can acquire<read> concurrently
-    auto locked_chunk2 = chunk_manager.acquire<ckm::read>(chunk_id_t(5)); // if no thread is writing at the same time
-    auto locked_chunk3 = chunk_manager.acquire<ckm::read>(chunk_id_t(5)); // 
+auto locked_chunk = chunk_manager.acquire<ckm::read>(chunk_id_t(5));  // multiple instance can acquire<read> concurrently
+auto locked_chunk2 = chunk_manager.acquire<ckm::read>(chunk_id_t(5)); // if no thread is writing at the same time
+auto locked_chunk3 = chunk_manager.acquire<ckm::read>(chunk_id_t(5)); // 
 
-    auto [el, tid] = locked_chunk->get<elevation, tile_id>(22, 181); // el will be of type const elevation&
+auto [el, tid] = locked_chunk->get<elevation, tile_id>(22, 181); // el will be of type const elevation&
 
-    assert(tid, 51);
+assert(tid, 51);
 
 ```
 ## Dependency 
