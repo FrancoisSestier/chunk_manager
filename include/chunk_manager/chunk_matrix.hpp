@@ -32,17 +32,17 @@ namespace ckm {
             }
         }
         template <acess_permission access_level>
-        auto aquire(int x, int y) {
-            return aquire<access_level>(index(x, y));
+        auto acquire(int x, int y) {
+            return acquire<access_level>(index(x, y));
         }
 
         template <acess_permission access_level>
-        auto try_aquire(int x, int y) {
-            return try_aquire<access_level>(index(x, y));
+        auto try_acquire(int x, int y) {
+            return try_acquire<access_level>(index(x, y));
         }
 
         template <acess_permission access_level>
-        auto aquire(chunk_id_t chunk_id) {
+        auto acquire(chunk_id_t chunk_id) {
             if constexpr (access_level == read) {
                 return chunk_storage_.at(chunk_id).acquire_read();
             } else if constexpr (access_level == write) {
@@ -51,7 +51,7 @@ namespace ckm {
         }
 
         template <acess_permission access_level>
-        auto try_aquire(chunk_id_t chunk_id) {
+        auto try_acquire(chunk_id_t chunk_id) {
             if constexpr (access_level == read) {
                 return chunk_storage_.at(chunk_id).try_acquire_read();
             } else if constexpr (access_level == write) {

@@ -19,22 +19,22 @@ namespace ckm {
 
         chunk_mananger() { chunk_matrix_.init(); }
 
-        auto aquire(chunk_id_t chunk_id) {
-            return chunk_matrix_.aquire(chunk_id);
+        auto acquire(chunk_id_t chunk_id) {
+            return chunk_matrix_.acquire(chunk_id);
         }
 
-        auto try_aquire(chunk_id_t chunk_id) {
-            return chunk_matrix_.try_aquire(chunk_id);
-        }
-
-        template <acess_permission access_level>
-        auto aquire(int x, int y) {
-            return chunk_matrix_.aquire<access_level>(x, y);
+        auto try_acquire(chunk_id_t chunk_id) {
+            return chunk_matrix_.try_acquire(chunk_id);
         }
 
         template <acess_permission access_level>
-        auto try_aquire(int x, int y) {
-            return chunk_matrix_.try_aquire<access_level>(x, y);
+        auto acquire(int x, int y) {
+            return chunk_matrix_.acquire<access_level>(x, y);
+        }
+
+        template <acess_permission access_level>
+        auto try_acquire(int x, int y) {
+            return chunk_matrix_.try_acquire<access_level>(x, y);
         }
 
        private:
