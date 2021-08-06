@@ -51,7 +51,7 @@ Only one writer can access a chunk at a time with acquire write.
 Writters have priority.
 
 ## Warnings
-it's not safe to call acquire() on the same chunk_id, in the same scope. since it operates on the same underlying mutex;
+it's not safe to call acquire<write>() on the same chunk_id, in the same scope. since it the second call will block the thread infinitely waiting for the first call to release;
 
 
 
