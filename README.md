@@ -21,29 +21,37 @@ using chunk_manager_t = ckm::chunk_mananger<10, 10, chunk_t>;
 // create the chunk_manager
 chunk_manager_t chunk_manager;
 {
-    // aquire chunk with world_pos or chunk_id
-    auto locked_chunk = chunk_manager.aquire(chunk_id_t(5)); 
+    // acquire chunk with world_pos or chunk_id
+    auto locked_chunk = chunk_manager.acquire<ckm::write>(chunk_id_t(5)); 
     // get and modified chunk data
     auto [el, tid] = locked_chunk->get<elevation, tile_id>(22, 181);
     el++;
     tile_id = 51;
 
 
-    auto locked_chunk2 = chunk_manager.try_aquire(chunk_id_t(5)); // will return empty optional (std::nullopt)
-    assert(!locked_chunk2.has_value()); // won't trigger
-
+    auto locked_chunk2 = chunk_manager.try_acquire<ckm::write>(chunk_id_t(5));
+    assert(!locked_chunk2.has_value()); // won't trigger 
 }// lock is released when locked_chunk gets out of scope
+
+    auto locked_chunk = chunk_manager.acquire<ckm::read>(chunk_id_t(5));  // multiple instance can acquire<read> concurrently
+    auto locked_chunk2 = chunk_manager.acquire<ckm::read>(chunk_id_t(5)); // if no thread is writing at the same time
+    auto locked_chunk3 = chunk_manager.acquire<ckm::read>(chunk_id_t(5)); // 
+
+    auto [el, tid] = locked_chunk->get<elevation, tile_id>(22, 181); // el will be of type const elevation&
+
+    assert(tid, 51);
+
 ```
 ## Dependency 
 [matrix_layer_stack](https://github.com/FrancoisSestier/matrix_layer_stack)
 
 ## Thread-safety
-aquire() is blocking, and will wait for another thread to release the chunk, before returning, if necessary.
-try_aquire() is non blocking, and returns an optional<locked_chunk<chunk_t>>, that is empty if the requested chunk is already aquired.
-They both grant thread safety.
+Any number of thread can acquire read simultaneously if no thread is writing.
+Only one writer can access a chunk at a time with acquire write.
+Writters have priority.
 
 ## Warnings
-it's not safe to call aquire() on the same chunk_id, in the same scope. since it operates on the same underlying mutex;
+it's not safe to call acquire() on the same chunk_id, in the same scope. since it operates on the same underlying mutex;
 
 
 
