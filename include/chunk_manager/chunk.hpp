@@ -73,19 +73,19 @@ namespace ckm {
             }
         }
 
-        chunk_id_t id() { return chunk_id_; }
+        chunk_id_t id() const { return chunk_id_; }
 
-        auto to_string() {
+        auto to_string() const {
             return fmt::format("\n\tchunk_id : {} \n\t pos : {}", chunk_id_,
                                details::to_string(pos_));
         }
 
-        chunk_id_t chunk_id() { return chunk_id_; }
+        chunk_id_t chunk_id() const { return chunk_id_; }
 
         int2 pos() { return pos_; }
 
        private:
-        void in_bounds(int x, int y) {
+        void in_bounds(int x, int y) const {
             if (x < pos_.x || x >= pos_.x + width || y < pos_.y
                 || y >= pos_.y + height) {
                 throw std::runtime_error(
