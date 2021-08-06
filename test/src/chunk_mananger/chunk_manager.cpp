@@ -27,12 +27,12 @@ TEST(chunk_mananger, ctor) {
     ASSERT_EQ(chunk_manager_t::map::height, 200);
 }
 
-TEST(chunk_mananger, aquire_write) {
+TEST(chunk_mananger, acquire_write) {
     ckm::int2 pos{24, 182};
 
     chunk_manager_t chunk_manager;
     {
-        auto locked_chunk = chunk_manager.aquire<ckm::write>(pos.x, pos.y);
+        auto locked_chunk = chunk_manager.acquire<ckm::write>(pos.x, pos.y);
 
         ASSERT_EQ(locked_chunk->pos().x, 20);
         ASSERT_EQ(locked_chunk->pos().y, 180);
@@ -41,10 +41,10 @@ TEST(chunk_mananger, aquire_write) {
         el = 10;
         tid = 22;
 
-        auto locked_chunk2 = chunk_manager.try_aquire<ckm::write>(pos.x, pos.y);
+        auto locked_chunk2 = chunk_manager.try_acquire<ckm::write>(pos.x, pos.y);
         ASSERT_FALSE(locked_chunk2.has_value());
     }
-    auto locked_chunk = chunk_manager.try_aquire<ckm::write>(pos.x, pos.y);
+    auto locked_chunk = chunk_manager.try_acquire<ckm::write>(pos.x, pos.y);
     ASSERT_TRUE(locked_chunk.has_value());
     ASSERT_EQ(locked_chunk->pos().x, 20);
     ASSERT_EQ(locked_chunk->pos().y, 180);
@@ -58,15 +58,15 @@ TEST(chunk_mananger, aquire_write) {
     ASSERT_EQ(tid, t);
 }
 
-TEST(chunk_manager, aquire_read) {
+TEST(chunk_manager, acquire_read) {
+    ckm::int2 pos{24, 182};
+
     chunk_manager_t chunk_manager;
     {
-        auto locked_chunk = chunk_manager.aquire<ckm::write>(pos.x, pos.y);
+        auto locked_chunk = chunk_manager.acquire<ckm::read>(pos.x, pos.y);
         auto [el, tid] = locked_chunk->get<elevation, tile_id>(22, 181);
-        el = 10;
-        tid = 22;
     }
 
-    auto locked_chunk = chunk_manager.aquire<ckm::read>(pos.x, pos.y);
+    auto locked_chunk = chunk_manager.acquire<ckm::read>(pos.x, pos.y);
     
 }
