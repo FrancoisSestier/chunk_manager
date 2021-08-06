@@ -27,7 +27,7 @@ if (CKM_DONT_INSTALL_DEPS)
   find_package(mls REQUIRED)
 
 else()
-  CPMAddPackage("gh:FrancoisSestier/matrix_layer_stack#bd90beec66f140feab95a1f6fff906eafbcda730")
+  CPMAddPackage("gh:FrancoisSestier/matrix_layer_stack#2c35df1de016e7db6e72f9336f93b468b91722e5")
   CPMAddPackage(
   NAME fmt
   GITHUB_REPOSITORY  fmtlib/fmt
