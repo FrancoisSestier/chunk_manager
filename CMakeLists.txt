@@ -49,7 +49,6 @@ target_link_libraries(chunk_manager INTERFACE mls)
 target_link_libraries(chunk_manager INTERFACE fmt)
 
 set_target_properties(chunk_manager PROPERTIES INTERFACE_COMPILE_FEATURES cxx_std_20)
-set_target_properties(chunk_manager PROPERTIES CXX_STANDARD 20)
 target_compile_options(chunk_manager INTERFACE "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->")
 
 target_include_directories(chunk_manager

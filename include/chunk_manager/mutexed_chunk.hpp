@@ -8,6 +8,12 @@
 
 namespace ckm {
 
+#if __GNUC__ >= 11 
+    using atomic_uint = std::atomic<unsigned int>;
+#else 
+    using atomic_uint = std::atomic_unsigned_lock_free;
+#endif
+
     template <typename chunk_type>
     class protected_chunk {
        public:
@@ -118,8 +124,8 @@ namespace ckm {
        private:
         chunk_t underlying_chunk_;
         std::binary_semaphore writer_sem_{1};
-        std::atomic_unsigned_lock_free writer_count_{0};
-        std::atomic_unsigned_lock_free reader_count_{0};
+        atomic_uint writer_count_{0};
+        atomic_uint reader_count_{0};
         std::atomic_flag reader_gate_;
     };
 
@@ -132,7 +138,7 @@ namespace ckm {
         if (reader_count_.fetch_add(1) == 0) {
             if (!writer_sem_.try_acquire()) {
                 unsigned int expected = 1;
-                if (!writer_sem_.compare_exchange_strong(expected, 0)) {
+                if (!reader_count_.compare_exchange_strong(expected, 0)) {
                     std::async(std::launch::async, [=, this]() {
                         writer_sem_.acquire();
                         while (reader_gate_.test_and_set()) {
