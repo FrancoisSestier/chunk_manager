@@ -11,7 +11,7 @@ namespace ckm {
 #if __GNUC__ >= 11 
     using atomic_uint = std::atomic<unsigned int>;
 #else 
-    using atomic_uint = std::atomic_unsigned_lock_free
+    using atomic_uint = std::atomic_unsigned_lock_free;
 #endif
 
     template <typename chunk_type>
