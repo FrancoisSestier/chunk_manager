@@ -88,14 +88,14 @@ namespace ckm {
         int2 pos() { return pos_; }
 
         template <typename T>
-        requires(std::conjunction_v<details::contains<Ts, data_types...>...>)
+        requires(std::conjunction_v<details::contains<T, data_types...>>)
             T* raw() {
             return storage_.template raw<T>();
         }
 
-        inline [[nodiscard]] storage_t* operator->() { return &storage_; }
+        [[nodiscard]] storage_t* operator->() { return &storage_; }
 
-        inline [[nodiscard]] storage_t& operator*() { return storage_; }
+        [[nodiscard]] storage_t& operator*() { return storage_; }
 
        private:
         void in_bounds(int x, int y) const {
