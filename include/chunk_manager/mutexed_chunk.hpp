@@ -8,9 +8,9 @@
 
 namespace ckm {
 
-#if __GNUC__ >= 11 
+#if __GNUC__ >= 11
     using atomic_uint = std::atomic<unsigned int>;
-#else 
+#else
     using atomic_uint = std::atomic_unsigned_lock_free;
 #endif
 
@@ -80,6 +80,7 @@ namespace ckm {
         void init(Ts... ts) {
             underlying_chunk_.init(std::forward<Ts>(ts)...);
         }
+        chunk_t* raw() { return &underlying_chunk_; }
 
        private:
         void reader_leave() {
@@ -117,11 +118,8 @@ namespace ckm {
             }
         }
 
-
-
         auto empty_lock() { return locked_chunk<chunk_t>(); }
 
-       private:
         chunk_t underlying_chunk_;
         std::binary_semaphore writer_sem_{1};
         atomic_uint writer_count_{0};

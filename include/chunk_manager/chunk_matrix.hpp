@@ -13,6 +13,8 @@ namespace ckm {
 
     inline static constexpr acess_permission read = 0;
     inline static constexpr acess_permission write = 1;
+    inline static constexpr acess_permission bypass = 2;
+
 
     template <size_t ckm_width, size_t ckm_height, typename chunk_type>
     struct chunk_matrix {
@@ -47,6 +49,8 @@ namespace ckm {
                 return chunk_storage_.at(chunk_id).acquire_read();
             } else if constexpr (access_level == write) {
                 return chunk_storage_.at(chunk_id).acquire_write();
+            } else if constexpr (access_level == bypass) {
+                return chunk_storage_.at(chunk_id).raw();
             }
         }
 

@@ -38,6 +38,8 @@ namespace ckm {
             return chunk_matrix_.template try_acquire<access_level>(x, y);
         }
 
+
+
        private:
         chunk_matrix_t chunk_matrix_;
     };
