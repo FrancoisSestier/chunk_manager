@@ -84,6 +84,8 @@ namespace ckm {
 
         int2 pos() { return pos_; }
 
+        [[nodiscard]] storage_t& operator*() {return storage_;}
+
        private:
         void in_bounds(int x, int y) const {
             if (x < pos_.x || x >= pos_.x + width || y < pos_.y

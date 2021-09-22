@@ -50,7 +50,7 @@ namespace ckm {
             } else if constexpr (access_level == write) {
                 return chunk_storage_.at(chunk_id).acquire_write();
             } else if constexpr (access_level == bypass) {
-                return chunk_storage_.at(chunk_id).raw();
+                return *chunk_storage_.at(chunk_id);
             }
         }
 

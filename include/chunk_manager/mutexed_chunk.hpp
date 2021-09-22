@@ -80,7 +80,9 @@ namespace ckm {
         void init(Ts... ts) {
             underlying_chunk_.init(std::forward<Ts>(ts)...);
         }
-        chunk_t* raw() { return &underlying_chunk_; }
+
+        [[nodiscard]] chunk_t* operator->() { return &underlying_chunk_; }
+        [[nodiscard]] chunk_t& operator*() { return underlying_chunk_; }
 
        private:
         void reader_leave() {

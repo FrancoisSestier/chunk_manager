@@ -77,8 +77,8 @@ TEST(chunk_manager, acquire_bypass) {
 
     chunk_manager_t chunk_manager;
     {
-        auto locked_chunk = chunk_manager.acquire<ckm::bypass>(pos.x, pos.y);
-        auto [el, tid] = locked_chunk->get<elevation, tile_id>(22, 181);
+        auto chunk = chunk_manager.acquire<ckm::bypass>(pos.x, pos.y);
+        auto [el, tid] = chunk.get<elevation, tile_id>(22, 181);
     }
 
     
